@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>The Zenith | Initializing...</title>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #0d0d0d; color: #e8e0d0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
+    
+    /* Premium Splash Logo Animation */
+    .logo-box { 
+      width: 88px; 
+      height: 88px; 
+      border: 1px solid rgba(201, 168, 76, 0.3); 
+      border-radius: 20px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      position: relative; 
+      overflow: hidden; 
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.15); 
+      background: #0a0a0a;
+    }
+    
+    /* The scanning light effect */
+    .logo-box::after { 
+      content: ''; 
+      position: absolute; 
+      top: -50%; left: -50%; 
+      width: 200%; height: 200%; 
+      background: linear-gradient(transparent, rgba(201, 168, 76, 0.4), transparent); 
+      transform: rotate(45deg); 
+      animation: scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+    }
+    
+    @keyframes scan { 
+      0% { transform: translateY(-100%) rotate(45deg); } 
+      100% { transform: translateY(100%) rotate(45deg); } 
+    }
+    
+    .pulse-text { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+    
+    .fade-out { opacity: 0; transition: opacity 0.6s ease; }
+  </style>
+</head>
+
+<body>
+  
+  <div class="flex flex-col items-center" id="splash-content">
+    <div class="logo-box mb-6 z-10">
+      <img src="my-logo.png" alt="The Zenith Logo" style="width: 55%; height: 55%; object-fit: contain; z-index: 20; position: relative;">
+    </div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;letter-spacing:0.15em;color:#e8e0d0;line-height:1;" class="mb-3">THE ZENITH</h1>
+    <p class="text-[0.65rem] uppercase tracking-[0.3em] text-[#9a9080] pulse-text">Verifying Credentials...</p>
+  </div>
+
+  <script>
+    // ════ NATIVE APP ROUTING ENGINE ════
+    window.addEventListener('load', () => {
+      
+      // Let the splash screen play for 2 seconds to establish brand authority
+      setTimeout(() => {
+        document.getElementById('splash-content').classList.add('fade-out');
+        
+        setTimeout(() => {
+          // Check local storage for existing credentials
+          const isAuth = localStorage.getItem('zenith_auth');
+          const hasName = localStorage.getItem('zenith_name');
+
+          // The Routing Logic
+          if (isAuth === 'true') {
+            if (hasName) {
+              // Returning member -> Go straight to dashboard
+              window.location.href = 'dashboard.html';
+            } else {
+              // Signed in but app crashed before finishing onboarding -> Go to onboarding
+              window.location.href = 'onboarding.html';
+            }
+          } else {
+            // Brand new user or logged out -> Go to Login page
+            window.location.href = 'login.html';
+          }
+        }, 600); // Wait for the fade-out to finish
+      }, 2000); 
+      
+    });
+  </script>
+</body>
+</html>

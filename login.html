@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Enter The Zenith
+    <script>
+    if (localStorage.getItem('zenith_auth') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+  </title>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25' } },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Custom Premium Cursor (Desktop Only) ── */
+    @media (pointer: fine) {
+      body, a, button, input { cursor: none !important; }
+      .cursor-dot { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 6px; height: 6px; background-color: #C9A84C; border-radius: 50%; z-index: 99999 !important; transform: translate(-50%, -50%); transition: transform 0.2s ease; }
+      .cursor-ring { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 34px; height: 34px; border: 1px solid rgba(201, 168, 76, 0.4); background: rgba(201, 168, 76, 0.05); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); border-radius: 50%; z-index: 99998 !important; transform: translate(-50%, -50%); transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease; }
+      .cursor-ring.hovered { width: 56px; height: 56px; background: rgba(201, 168, 76, 0.1); border-color: rgba(201, 168, 76, 0.8); }
+      .cursor-dot.hovered { transform: translate(-50%, -50%) scale(0.5); }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { background-color: #0d0d0d; }
+    body { 
+      font-family: 'Montserrat', sans-serif; 
+      background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(201, 168, 76, 0.08) 0%, #0d0d0d 100%);
+      color: #e8e0d0; 
+      min-height: 100vh; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      opacity: 0; /* Starts hidden for fade-in effect */
+      transition: opacity 0.8s ease;
+    }
+    
+    .glass { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 16px; box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
+    
+    .glass-input { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 8px; padding: 16px; color: #e8e0d0; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; transition: all 0.3s ease; }
+    .glass-input:focus { outline: none; border-color: #C9A84C; background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 12px rgba(201, 168, 76, 0.1); }
+    .glass-input::placeholder { color: #6a6055; }
+    
+    .btn-primary { background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 50%, #C9A84C 100%); color: #0d0d0d; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 18px; border: none; border-radius: 8px; width: 100%; cursor: pointer; transition: transform 0.2s; }
+    .btn-primary:active { transform: scale(0.98); }
+    
+    .logo-container { width: 64px; height: 64px; border: 1px solid rgba(201, 168, 76, 0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; background: rgba(201, 168, 76, 0.05); }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <div class="w-full max-w-md px-6">
+    
+    <div class="text-center mb-8">
+      <div class="logo-container">
+        <img src="my-logo.png" alt="Logo" style="width: 70%; height: 70%; object-fit: contain;">
+      </div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Authenticate.</h1>
+      <p style="font-size:0.8rem;color:#9a9080;margin-top:8px;letter-spacing:0.05em;">Enter your credentials to access the Zenith.</p>
+    </div>
+
+    <div class="glass p-8">
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="mb-5">
+          <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Email Address</label>
+          <input type="email" class="glass-input" placeholder="sovereign@example.com" required>
+        </div>
+        
+        <div class="mb-8">
+          <div class="flex justify-between items-end mb-2 ml-1 pr-1">
+            <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080]">Master Password</label>
+            <a href="#" style="font-size:0.65rem; color:#6a6055; text-decoration:none;" class="hover:text-[#C9A84C]">Forgot?</a>
+          </div>
+          <input type="password" class="glass-input" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-primary flex justify-center items-center gap-3">
+          Initialize System
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    // Fade in on load
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+
+    // Handle Login Transition
+    // Fake a network request, set the Auth Token, and redirect
+      setTimeout(() => {
+        localStorage.setItem('zenith_auth', 'true');
+        document.body.style.opacity = '0';
+        
+        setTimeout(() => {
+          // CHECK IF THEY HAVE A NAME SAVED
+          if (!localStorage.getItem('zenith_name')) {
+            window.location.href = 'onboarding.html'; // First time
+          } else {
+            window.location.href = 'dashboard.html'; // Returning user
+          }
+        }, 600); 
+      }, 1200);
+
+    // Auto-Redirect if they are already logged in
+    window.addEventListener('load', () => {
+      if(localStorage.getItem('zenith_auth') === 'true') {
+        window.location.href = 'dashboard.html';
+      } else {
+        document.body.style.opacity = '1';
+      }
+    });
+
+    // Custom Premium Cursor Logic
+    if (window.matchMedia("(pointer: fine)").matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+        if(ring) { ring.style.left = `${ringX}px`; ring.style.top = `${ringY}px`; }
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      const interactables = document.querySelectorAll('a, button, input');
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if(ring) ring.classList.add('hovered');
+          if(dot) dot.classList.add('hovered');
+        });
+        el.addEventListener('mouseleave', () => {
+          if(ring) ring.classList.remove('hovered');
+          if(dot) dot.classList.remove('hovered');
+        });
+      });
+    }
+  </script>
+</body>
+</html>

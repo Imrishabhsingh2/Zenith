@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Skincare Vault | The Zenith
+    <script>
+    if (localStorage.getItem('zenith_auth') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+  </title>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25', muted: '#7A6235' },
+            charcoal: { DEFAULT: '#1A1A1A', 800: '#252525', 700: '#2F2F2F', 600: '#3A3A3A', 500: '#4A4A4A' },
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Custom Premium Cursor (Desktop Only) ── */
+    @media (pointer: fine) {
+      body, a, button, input, select, textarea, .filter-btn, .nav-item { cursor: none !important; }
+      .cursor-dot { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 6px; height: 6px; background-color: #C9A84C; border-radius: 50%; z-index: 99999 !important; transform: translate(-50%, -50%); transition: transform 0.2s ease; }
+      .cursor-ring { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 34px; height: 34px; border: 1px solid rgba(201, 168, 76, 0.4); background: rgba(201, 168, 76, 0.05); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); border-radius: 50%; z-index: 99998 !important; transform: translate(-50%, -50%); transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease; }
+      .cursor-ring.hovered { width: 56px; height: 56px; background: rgba(201, 168, 76, 0.1); border-color: rgba(201, 168, 76, 0.8); }
+      .cursor-dot.hovered { transform: translate(-50%, -50%) scale(0.5); }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { background-color: #0d0d0d; overflow-x: hidden; }
+    body { font-family: 'Montserrat', sans-serif; background-color: #0d0d0d; color: #e8e0d0; overflow-x: hidden; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+    
+    main { padding-top: env(safe-area-inset-top); padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+
+    .glass { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 16px; transition: border-color 0.3s ease, transform 0.3s ease; }
+    .tag { display: inline-block; padding: 6px 16px; border-radius: 99px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; background: rgba(201, 168, 76, 0.1); border: 1px solid rgba(201, 168, 76, 0.25); color: #C9A84C; }
+    
+    /* ── Filter Buttons & Scroll ── */
+    .filter-btn { background: transparent; color: #9a9080; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 20px; border: 1px solid rgba(201, 168, 76, 0.3); border-radius: 99px; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+    .filter-btn:hover { border-color: rgba(201, 168, 76, 0.8); color: #e8e0d0; }
+    .filter-btn.active { background: rgba(201, 168, 76, 0.15); border-color: #C9A84C; color: #C9A84C; }
+    .filter-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; -ms-overflow-style: none; scrollbar-width: none; }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── Vault Grid Animations ── */
+    .vault-item { transition: all 0.4s ease; opacity: 1; transform: scale(1); }
+    .vault-item.hidden { display: none; }
+    .vault-item.fade-in-scale { animation: popIn 0.4s ease forwards; }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+
+    /* ── Ultra-Premium Floating Glass Dock ── */
+    .bottom-nav { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: auto; min-width: 280px; background: rgba(15, 15, 15, 0.35); backdrop-filter: blur(36px) saturate(220%); -webkit-backdrop-filter: blur(36px) saturate(220%); border: 1px solid rgba(201, 168, 76, 0.2); border-top: 1px solid rgba(201, 168, 76, 0.4); border-radius: 99px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05); display: flex; justify-content: space-evenly; align-items: center; height: 64px; z-index: 1000; padding: 0 12px; gap: 8px; }
+    .nav-item { display: flex; align-items: center; justify-content: center; color: #6a6055; text-decoration: none; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); width: 44px; height: 44px; border-radius: 50%; background: transparent; }
+    .nav-item.active { color: #C9A84C; background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.25); box-shadow: 0 0 16px rgba(201, 168, 76, 0.15), inset 0 0 8px rgba(201, 168, 76, 0.1); }
+    .nav-item svg { width: 22px; height: 22px; stroke: currentColor; transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+    .nav-item.active svg { transform: scale(1.15); filter: drop-shadow(0 2px 6px rgba(201, 168, 76, 0.5)); }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <main class="px-5 py-6">
+    
+    <div class="mb-6 pt-4">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:#C9A84C;">THE VAULT</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Skincare Arsenal.</h1>
+    </div>
+
+    <div class="flex gap-2 mb-8 bg-[#1a1a1a] p-1 rounded-lg">
+      <a href="dressing-sense.html" class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md text-[#9a9080] hover:text-[#e8e0d0] font-medium transition-all" style="text-decoration:none;">Wardrobe</a>
+      <a href="skincare.html" class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md bg-[#C9A84C] text-[#0d0d0d] font-bold transition-all" style="text-decoration:none;">Skincare</a>
+      <a href="body-transform.html" class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md text-[#9a9080] hover:text-[#e8e0d0] font-medium transition-all" style="text-decoration:none;">Body</a>
+    </div>
+
+    <!-- The Protocol Section -->
+    <section class="mb-10">
+      <h2 style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#9a9080;margin-bottom:12px;margin-left:4px;">The Protocol</h2>
+      <div class="flex flex-col gap-3 relative before:absolute before:inset-y-0 before:left-[15px] before:w-px before:bg-[#C9A84C]/20">
+        
+        <div class="flex gap-4 relative z-10">
+          <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#C9A84C]/50 flex items-center justify-center text-[0.7rem] font-bold text-[#C9A84C] flex-shrink-0 mt-1">1</div>
+          <div class="glass p-4 flex-1">
+            <h3 class="font-['Bebas_Neue'] text-lg text-[#e8e0d0] tracking-widest mb-1">Cleanse & Prep</h3>
+            <p class="text-[0.75rem] text-[#9a9080] mb-2">Remove impurities without stripping the lipid barrier. Use Salicylic Acid (BHA) for oily skin, or a gentle Hydrating Cleanser for dry skin.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 relative z-10">
+          <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#C9A84C]/50 flex items-center justify-center text-[0.7rem] font-bold text-[#C9A84C] flex-shrink-0 mt-1">2</div>
+          <div class="glass p-4 flex-1">
+            <h3 class="font-['Bebas_Neue'] text-lg text-[#e8e0d0] tracking-widest mb-1">Target Actives</h3>
+            <p class="text-[0.75rem] text-[#9a9080] mb-2">Deliver potent molecules. <strong>AM:</strong> Vitamin C (L-Ascorbic Acid) for antioxidant protection. <strong>PM:</strong> Retinol or Niacinamide for cellular turnover.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4 relative z-10">
+          <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#C9A84C]/50 flex items-center justify-center text-[0.7rem] font-bold text-[#C9A84C] flex-shrink-0 mt-1">3</div>
+          <div class="glass p-4 flex-1">
+            <h3 class="font-['Bebas_Neue'] text-lg text-[#e8e0d0] tracking-widest mb-1">Seal & Protect</h3>
+            <p class="text-[0.75rem] text-[#9a9080]">Lock in moisture with Ceramides. In the morning, follow immediately with SPF 50+ to block photo-aging UV rays.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- The Archive Section -->
+    <h2 style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#9a9080;margin-bottom:12px;margin-left:4px;">The Archive</h2>
+
+    <div class="filter-scroll mb-8" id="filter-container">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="cleansers">Cleansers</button>
+      <button class="filter-btn" data-filter="serums">Serums & Actives</button>
+      <button class="filter-btn" data-filter="moisturizers">Moisturizers & SPF</button>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6" id="vault-grid">
+      
+      <div class="vault-item glass overflow-hidden relative" data-category="cleansers">
+        <span class="absolute top-4 right-4 tag bg-[#0d0d0d]/80 backdrop-blur-md z-10">Essential</span>
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600" alt="Salicylic Gel" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">2% Salicylic Exfoliating Gel</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">Unclogs pores without stripping moisture.</p>
+          </div>
+          <a href="https://theordinary.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+
+      <div class="vault-item glass overflow-hidden relative" data-category="cleansers">
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=600" alt="Activated Charcoal Wash" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">Activated Charcoal Wash</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">Draws out urban impurities.</p>
+          </div>
+          <a href="https://www.kiehls.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+
+      <div class="vault-item glass overflow-hidden relative" data-category="serums">
+        <span class="absolute top-4 right-4 tag bg-[#0d0d0d]/80 backdrop-blur-md z-10">Premium</span>
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&q=80&w=600" alt="Vitamin C Serum" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">15% L-Ascorbic Acid Serum</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">The gold standard antioxidant.</p>
+          </div>
+          <a href="https://www.skinceuticals.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+
+      <div class="vault-item glass overflow-hidden relative" data-category="serums">
+        <span class="absolute top-4 right-4 tag bg-[#0d0d0d]/80 backdrop-blur-md z-10">Night Routine</span>
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1615397323734-20ac376fcaf3?auto=format&fit=crop&q=80&w=600" alt="Retinol" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">1% Encapsulated Retinol</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">Defies the aging process while you sleep.</p>
+          </div>
+          <a href="https://www.paulaschoice.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+
+      <div class="vault-item glass overflow-hidden relative" data-category="moisturizers">
+        <span class="absolute top-4 right-4 tag bg-[#0d0d0d]/80 backdrop-blur-md z-10">Crucial</span>
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&q=80&w=600" alt="Daily SPF" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">Matte Defense SPF 50</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">Broad-spectrum protection without the shine.</p>
+          </div>
+          <a href="https://www.eltamd.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+
+      <div class="vault-item glass overflow-hidden relative" data-category="moisturizers">
+        <div class="h-40 w-full bg-[#111]">
+           <img src="https://images.unsplash.com/photo-1611078489935-0cb964de46d6?auto=format&fit=crop&q=80&w=600" alt="Night Cream" class="w-full h-full object-cover opacity-80 hover:scale-105 transition-all duration-700">
+        </div>
+        <div class="p-5 flex justify-between items-start">
+          <div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#e8e0d0;margin-bottom:6px;">Ceramide Barrier Cream</h3>
+            <p style="font-size:0.75rem;color:#9a9080;">Rebuilds the skin's natural lipid barrier.</p>
+          </div>
+          <a href="https://www.cerave.com/" target="_blank" class="text-[0.65rem] uppercase tracking-widest font-bold border border-[#C9A84C] text-[#C9A84C] px-4 py-2 rounded-full hover:bg-[#C9A84C] hover:text-[#0d0d0d] transition-colors" style="text-decoration:none;">BUY</a>
+        </div>
+      </div>
+      
+    </div>
+    <div class="h-20 w-full"></div>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+    </a>
+    <a href="module-viewer.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+    </a>
+    <a href="dressing-sense.html" class="nav-item active">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+    </a>
+  </nav>
+
+  <script>
+    // Custom Premium Cursor Logic
+    if (window.matchMedia("(pointer: fine)").matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+        if(ring) { ring.style.left = `${ringX}px`; ring.style.top = `${ringY}px`; }
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      const interactables = document.querySelectorAll('a, button, .filter-btn, .nav-item');
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if(ring) ring.classList.add('hovered');
+          if(dot) dot.classList.add('hovered');
+        });
+        el.addEventListener('mouseleave', () => {
+          if(ring) ring.classList.remove('hovered');
+          if(dot) dot.classList.remove('hovered');
+        });
+      });
+    }
+
+    // Vault Filter Logic
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const vaultItems = document.querySelectorAll('.vault-item');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const filterValue = button.getAttribute('data-filter');
+
+        vaultItems.forEach(item => {
+          item.classList.remove('fade-in-scale');
+          
+          if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+            item.classList.remove('hidden');
+            setTimeout(() => {
+              item.classList.add('fade-in-scale');
+            }, 10);
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+
+  <script src="ai-core.js"></script>
+</body>
+</html>

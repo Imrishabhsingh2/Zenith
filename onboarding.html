@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>System Initialization | The Zenith</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background-color: #0d0d0d; }
+    body { font-family: 'Montserrat', sans-serif; background: #0d0d0d; color: #e8e0d0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
+    .glass { background: rgba(15, 15, 15, 0.6); backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 16px; box-shadow: 0 24px 48px rgba(0,0,0,0.5); }
+    .glass-input { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 8px; padding: 16px; color: #e8e0d0; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; transition: all 0.3s ease; }
+    .glass-input:focus { outline: none; border-color: #C9A84C; background: rgba(255, 255, 255, 0.06); }
+    .btn-primary { background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 50%, #C9A84C 100%); color: #0d0d0d; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 18px; border: none; border-radius: 8px; width: 100%; cursor: pointer; transition: transform 0.2s; }
+    .btn-primary:active { transform: scale(0.98); }
+    .step { display: none; opacity: 0; transition: opacity 0.4s ease; }
+    .step.active { display: block; opacity: 1; animation: fadeIn 0.5s forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="w-full max-w-md px-6">
+    
+    <div id="step-1" class="step active">
+      <div class="text-center mb-8">
+        <p style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:#C9A84C;">PHASE 1 OF 2</p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Identity Protocol.</h1>
+        <p style="font-size:0.8rem;color:#9a9080;margin-top:8px;">Enter your legal name to establish your profile.</p>
+      </div>
+      <div class="glass p-8">
+        <div class="mb-5">
+          <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">First Name</label>
+          <input type="text" id="firstName" class="glass-input" placeholder="Alexander" required>
+        </div>
+        <div class="mb-8">
+          <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Last Name</label>
+          <input type="text" id="lastName" class="glass-input" placeholder="Great" required>
+        </div>
+        <button onclick="nextStep()" class="btn-primary">Continue →</button>
+      </div>
+    </div>
+
+    <div id="step-2" class="step">
+      <div class="text-center mb-8">
+        <p style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:#C9A84C;">PHASE 2 OF 2</p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Physical Metrics.</h1>
+        <p style="font-size:0.8rem;color:#9a9080;margin-top:8px;">Required to calibrate your daily nutrition & protein protocol.</p>
+      </div>
+      <div class="glass p-8">
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div>
+            <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Age</label>
+            <input type="number" id="age" class="glass-input" placeholder="28" required>
+          </div>
+          <div>
+            <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Height (CM)</label>
+            <input type="number" id="height" class="glass-input" placeholder="180" required>
+          </div>
+        </div>
+        <div class="mb-8">
+          <label class="block text-[0.65rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Current Weight (KG)</label>
+          <input type="number" id="weight" class="glass-input" placeholder="82" required>
+        </div>
+        <button onclick="saveProfile()" class="btn-primary">Initialize System →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function nextStep() {
+      const first = document.getElementById('firstName').value.trim();
+      const last = document.getElementById('lastName').value.trim();
+      if(!first || !last) return alert("Identify yourself to proceed.");
+      
+      document.getElementById('step-1').classList.remove('active');
+      setTimeout(() => document.getElementById('step-2').classList.add('active'), 300);
+    }
+
+    function saveProfile() {
+      const first = document.getElementById('firstName').value.trim();
+      const last = document.getElementById('lastName').value.trim();
+      const weight = parseFloat(document.getElementById('weight').value);
+      
+      if(!weight) return alert("Metrics required for calibration.");
+
+      // Calculate Protein Goal (Bodyweight in kg * 2.0 grams)
+      const proteinGoal = Math.round(weight * 2.0);
+
+      localStorage.setItem('zenith_name', `${first} ${last}`);
+      localStorage.setItem('zenith_first', first);
+      localStorage.setItem('zenith_initials', (first.charAt(0) + last.charAt(0)).toUpperCase());
+      
+      // Save Nutrition Data
+      localStorage.setItem('zenith_protein_goal', proteinGoal);
+      localStorage.setItem('zenith_protein_current', 0); // Start day at 0g
+
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

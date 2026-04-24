@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Nutrition Scanner | The Zenith</title>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25' },
+            charcoal: { DEFAULT: '#1A1A1A', 800: '#252525' },
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background-color: #0d0d0d; overflow-x: hidden; }
+    body { font-family: 'Montserrat', sans-serif; background-color: #0d0d0d; color: #e8e0d0; overflow-x: hidden; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+    
+    .glass { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 16px; }
+    
+    .scanner-container { position: relative; width: 100%; height: 60vh; border-radius: 20px; overflow: hidden; background: #111; box-shadow: 0 0 30px rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3); }
+    video { width: 100%; height: 100%; object-fit: cover; }
+    
+    .scan-line {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+      box-shadow: 0 0 10px #C9A84C;
+      animation: scan 2s linear infinite;
+      display: none;
+      z-index: 20;
+    }
+    
+    @keyframes scan {
+      0% { top: 0; }
+      50% { top: 100%; }
+      100% { top: 0; }
+    }
+    
+    .overlay-frame {
+      position: absolute; top: 10%; left: 10%; width: 80%; height: 80%;
+      border: 2px dashed rgba(201,168,76,0.5);
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Optional focus corners */
+    .overlay-frame::before {
+      content: ''; position: absolute; top: -2px; left: -2px; width: 20px; height: 20px; border-top: 3px solid #C9A84C; border-left: 3px solid #C9A84C; border-radius: 12px 0 0 0;
+    }
+    .overlay-frame::after {
+      content: ''; position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-bottom: 3px solid #C9A84C; border-right: 3px solid #C9A84C; border-radius: 0 0 12px 0;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center p-5 pt-8">
+
+  <div class="w-full max-w-md flex flex-col">
+    <!-- Header -->
+    <div class="mb-6 w-full flex justify-between items-center">
+      <a href="dashboard.html" class="text-[#9a9080] hover:text-[#C9A84C] transition-colors" style="text-decoration:none;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <h1 style="font-family:'Bebas Neue',sans-serif;letter-spacing:0.15em;color:#C9A84C;font-size:1.2rem;margin:0;">AI NUTRITION SCANNER</h1>
+      <div class="w-6"></div> <!-- Spacer for center alignment -->
+    </div>
+
+    <!-- Scanner Viewfinder -->
+    <div class="scanner-container mb-6 relative">
+      <video id="camera-feed" autoplay playsinline></video>
+      <div class="overlay-frame" id="overlay"></div>
+      <div class="scan-line" id="scan-line"></div>
+    </div>
+
+    <!-- Status Text -->
+    <div id="status-text" class="text-center mb-6" style="font-size:0.85rem;color:#9a9080;letter-spacing:0.05em;min-height: 24px;">
+      Point camera at your meal.
+    </div>
+
+    <!-- Scan Button -->
+    <button id="scan-btn" class="w-full glass py-4 rounded-full text-[#0d0d0d] font-bold tracking-widest uppercase transition-all duration-300 relative overflow-hidden cursor-pointer" style="background: linear-gradient(135deg, #C9A84C, #8C6D25); border:none;">
+      <span class="relative z-10" style="font-size:0.85rem;">Scan Meal</span>
+    </button>
+    
+    <!-- Result Card (Hidden Initially) -->
+    <div id="result-card" class="glass w-full p-6 mt-6 hidden opacity-0 transition-opacity duration-500">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:4px;" id="food-name">Recognized: Grilled Salmon</h2>
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#C9A84C;letter-spacing:0.1em;margin-bottom:12px;" id="food-protein">PROTEIN: 42g</p>
+      <div class="w-full h-[1px] bg-gradient-to-r from-[#C9A84C]/40 to-transparent mb-4"></div>
+      <p style="font-size:0.75rem;color:#9a9080;line-height:1.6;">Added to today's protocol. Returning to dashboard...</p>
+    </div>
+
+  </div>
+
+  <script>
+    const video = document.getElementById('camera-feed');
+    const scanBtn = document.getElementById('scan-btn');
+    const scanLine = document.getElementById('scan-line');
+    const statusText = document.getElementById('status-text');
+    const resultCard = document.getElementById('result-card');
+    const foodNameEl = document.getElementById('food-name');
+    const foodProteinEl = document.getElementById('food-protein');
+
+    // Foods to randomly simulate
+    const foods = [
+      { name: "Grilled Salmon Filet", protein: 42 },
+      { name: "Chicken Breast & Rice", protein: 35 },
+      { name: "Sirloin Steak (8oz)", protein: 48 },
+      { name: "Greek Yogurt & Almonds", protein: 22 },
+      { name: "Whey Protein Shake", protein: 30 },
+      { name: "Omelette (4 Eggs)", protein: 24 }
+    ];
+
+    // Initialize Camera
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment' } 
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error("Camera access denied or unavailable", err);
+        statusText.innerText = "Camera unavailable. Simulating scan mode.";
+        // We still allow the user to click the scan button to simulate it
+      }
+    }
+
+    // Start camera immediately
+    startCamera();
+
+    scanBtn.addEventListener('click', () => {
+      // Prevent multiple clicks
+      if(scanBtn.disabled) return;
+      scanBtn.disabled = true;
+      scanBtn.style.opacity = '0.6';
+      scanBtn.style.transform = 'scale(0.98)';
+      
+      // Pause video to simulate taking a photo
+      if(video.srcObject) {
+        video.pause();
+      }
+      
+      // Show scanning laser animation
+      scanLine.style.display = 'block';
+      statusText.innerText = "Analyzing macromolecules...";
+      
+      // Simulate API processing delay (2.5s)
+      setTimeout(() => {
+        scanLine.style.display = 'none';
+        
+        // Pick a random food item from the database
+        const food = foods[Math.floor(Math.random() * foods.length)];
+        
+        foodNameEl.innerText = `Recognized: ${food.name}`;
+        foodProteinEl.innerText = `PROTEIN: ${food.protein}g`;
+        
+        // Show result
+        statusText.innerText = "Scan Complete.";
+        resultCard.classList.remove('hidden');
+        setTimeout(() => resultCard.classList.remove('opacity-0'), 50);
+        
+        // Add protein to local storage (Dashboard reads this)
+        let current = parseInt(localStorage.getItem('zenith_protein_current')) || 0;
+        current += food.protein;
+        localStorage.setItem('zenith_protein_current', current);
+        
+        // Redirect back to dashboard after a delay
+        setTimeout(() => {
+          // Stop camera stream before leaving
+          if (video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
+          }
+          window.location.href = 'dashboard.html';
+        }, 3000);
+        
+      }, 2500);
+    });
+  </script>
+  <script src="ai-core.js"></script>
+</body>
+</html>

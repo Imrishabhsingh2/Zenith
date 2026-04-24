@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body & Presence | The Zenith</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="apple-touch-icon" href="app-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-navbutton-color" content="#0d0d0d">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25', muted: '#7A6235' },
+            charcoal: { DEFAULT: '#1A1A1A', 800: '#252525', 700: '#2F2F2F', 600: '#3A3A3A', 500: '#4A4A4A' },
+            cream: '#F5F0E8',
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Custom Premium Cursor (Desktop Only) ── */
+    @media (pointer: fine) {
+
+      /* Hide the default system cursor */
+      body,
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      .filter-btn {
+        cursor: none !important;
+      }
+
+      /* The sharp center point */
+      .cursor-dot {
+        width: 6px;
+        height: 6px;
+        background-color: #C9A84C;
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        /* Let clicks pass right through it */
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s ease;
+      }
+
+      /* The smooth trailing glass ring */
+      .cursor-ring {
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        background: rgba(201, 168, 76, 0.05);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        /* Let clicks pass right through it */
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+      }
+
+      /* The expanded state when hovering over links/buttons */
+      .cursor-ring.hovered {
+        width: 56px;
+        height: 56px;
+        background: rgba(201, 168, 76, 0.1);
+        border-color: rgba(201, 168, 76, 0.8);
+      }
+
+      .cursor-dot.hovered {
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+    }
+
+    /* ── CTA button ── */
+    .btn-primary {
+      background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 50%, #C9A84C 100%);
+      background-size: 200% 100%;
+      color: #0d0d0d;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 24px rgba(201, 168, 76, 0.25);
+    }
+
+    .btn-primary:hover {
+      background-position: 100% 0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(201, 168, 76, 0.35);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #C9A84C;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 13px 34px;
+      border: 1px solid rgba(201, 168, 76, 0.45);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(201, 168, 76, 0.08);
+      border-color: rgba(201, 168, 76, 0.7);
+      transform: translateY(-2px);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background-color: #0d0d0d;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0d0d0d;
+      color: #e8e0d0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    main {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #C9A84C 0%, #E8C97A 40%, #C9A84C 65%, #8C6D25 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 16px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .glass:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+    }
+
+    .glass-dark {
+      background: rgba(10, 10, 10, 0.55);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      border: 1px solid rgba(201, 168, 76, 0.18);
+      border-radius: 16px;
+    }
+
+    .gold-line {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+    }
+
+    .gold-line-full {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(201, 168, 76, 0.4) 30%, rgba(201, 168, 76, 0.4) 70%, transparent 100%);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      color: #C9A84C;
+      transition: all 0.2s ease;
+      cursor: default;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #C9A84C;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 13px 34px;
+      border: 1px solid rgba(201, 168, 76, 0.45);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(201, 168, 76, 0.08);
+      border-color: rgba(201, 168, 76, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Ultra-Premium Floating Glass Dock ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      min-width: 280px;
+      background: rgba(15, 15, 15, 0.35);
+      backdrop-filter: blur(36px) saturate(220%);
+      -webkit-backdrop-filter: blur(36px) saturate(220%);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-top: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 99px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      height: 64px;
+      z-index: 1000;
+      padding: 0 12px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6a6055;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    .nav-item.active {
+      color: #C9A84C;
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      box-shadow: 0 0 16px rgba(201, 168, 76, 0.15), inset 0 0 8px rgba(201, 168, 76, 0.1);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .nav-item.active svg {
+      transform: scale(1.15);
+      filter: drop-shadow(0 2px 6px rgba(201, 168, 76, 0.5));
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <main class="px-5 py-6">
+
+    <div class="mb-6 pt-4">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:#C9A84C;">THE VAULT</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Physical &
+        Mental Mastery.</h1>
+    </div>
+
+    <div class="flex gap-2 mb-8 bg-[#1a1a1a] p-1 rounded-lg">
+      <a href="dressing-sense.html"
+        class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md text-[#9a9080] hover:text-[#e8e0d0] font-medium transition-all"
+        style="text-decoration:none;">Wardrobe</a>
+      <a href="skincare.html"
+        class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md text-[#9a9080] hover:text-[#e8e0d0] font-medium transition-all"
+        style="text-decoration:none;">Skincare</a>
+      <a href="body-transform.html"
+        class="flex-1 py-2 text-center text-[0.7rem] uppercase tracking-widest rounded-md bg-[#C9A84C] text-[#0d0d0d] font-bold transition-all"
+        style="text-decoration:none;">Body</a>
+    </div>
+
+    <section class="mb-10">
+      <div class="mb-8 fade-in">
+        <h2
+          style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#e8e0d0;font-weight:300; border-bottom: 1px solid rgba(201,168,76,0.2); padding-bottom: 10px;">
+          The <span class="text-gold-gradient" style="font-style:italic;">Architect</span> Protocols
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+
+        <div class="glass flex flex-col overflow-hidden group fade-in" style="padding:0;">
+          <div
+            class="relative h-64 overflow-hidden bg-[#111] flex items-center justify-center border-b border-[#C9A84C]/20">
+            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=600"
+              alt="V-Taper Workout"
+              class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-80" />
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <p
+              style="font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:#C9A84C;margin-bottom:8px;font-weight:600;">
+              Morphology</p>
+            <h3
+              style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:8px;line-height:1.2;">
+              The V-Taper Protocol</h3>
+            <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;margin-bottom:20px;flex-grow:1;">
+              Broad shoulders and a narrow waist signal primal capability. Focus heavily on weighted pull-ups, lateral
+              raises, and lat pulldowns. Keep rep ranges between 8-12 for maximum hypertrophy.
+            </p>
+            <ul
+              style="list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Pull-ups: 4 sets x Failure</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span> Lat
+                Pulldowns: 3 sets x 10 reps</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Lateral Raises: 4 sets x 15 reps</li>
+            </ul>
+            <button class="btn-ghost w-full text-center">Log Workout</button>
+          </div>
+        </div>
+
+        <div class="glass flex flex-col overflow-hidden group fade-in" style="padding:0; transition-delay:0.1s;">
+          <div
+            class="relative h-64 overflow-hidden bg-[#111] flex items-center justify-center border-b border-[#C9A84C]/20">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600"
+              alt="Foundation of Iron"
+              class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-80" />
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <p
+              style="font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:#C9A84C;margin-bottom:8px;font-weight:600;">
+              Strength</p>
+            <h3
+              style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:8px;line-height:1.2;">
+              Foundation of Iron</h3>
+            <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;margin-bottom:20px;flex-grow:1;">
+              Compound movements build dense, functional muscle and spike natural testosterone production. The deadlift
+              and squat are non-negotiable for true structural power.
+            </p>
+            <ul
+              style="list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Barbell Deadlift: 5 sets x 5 reps</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Front Squats: 4 sets x 8 reps</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Overhead Press: 4 sets x 6 reps</li>
+            </ul>
+            <button class="btn-ghost w-full text-center">Log Workout</button>
+          </div>
+        </div>
+
+        <div class="glass flex flex-col overflow-hidden group fade-in" style="padding:0; transition-delay:0.2s;">
+          <div
+            class="relative h-64 overflow-hidden bg-[#111] flex items-center justify-center border-b border-[#C9A84C]/20">
+            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600"
+              alt="Core and Posture"
+              class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-80" />
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <p
+              style="font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:#C9A84C;margin-bottom:8px;font-weight:600;">
+              Alignment</p>
+            <h3
+              style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:8px;line-height:1.2;">
+              The Gentleman's Stance</h3>
+            <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;margin-bottom:20px;flex-grow:1;">
+              A slumped posture ruins even the finest bespoke suit. Realign your spine, open your chest, and build
+              anti-rotational core strength to walk into any room with effortless confidence.
+            </p>
+            <ul
+              style="list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom: 24px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span> Face
+                Pulls: 3 sets x 15 reps</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Farmer's Walks: 3 sets x 45 sec</li>
+              <li style="font-size:0.75rem; color:#c0b090;"><span style="color:#C9A84C; margin-right:8px;">✦</span>
+                Pallof Press: 3 sets x 12 reps</li>
+            </ul>
+            <button class="btn-ghost w-full text-center">Log Workout</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <div class="mb-8 fade-in">
+        <h2
+          style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#e8e0d0;font-weight:300; border-bottom: 1px solid rgba(201,168,76,0.2); padding-bottom: 10px;">
+          The Science of <span class="text-gold-gradient" style="font-style:italic;">Rest</span>
+        </h2>
+        <p style="font-size:0.85rem;color:#9a9080;margin-top:10px;">Muscles are torn in the gym, fed in the kitchen, and
+          built in bed.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        <div class="glass p-8 fade-in">
+          <h3 class="font-['Bebas_Neue'] text-xl text-[#C9A84C] tracking-widest mb-3">Circadian Optimization</h3>
+          <p class="text-[0.8rem] text-[#9a9080] leading-relaxed mb-4">Your deepest, most restorative sleep occurs when
+            your core body temperature drops. Limit screen time 60 minutes before bed, keep the room at 65°F (18°C), and
+            aim for 7.5 to 8 hours of uninterrupted sleep. This maximizes HGH (Human Growth Hormone) release.</p>
+        </div>
+        <div class="glass p-8 fade-in">
+          <h3 class="font-['Bebas_Neue'] text-xl text-[#C9A84C] tracking-widest mb-3">Active Recovery</h3>
+          <p class="text-[0.8rem] text-[#9a9080] leading-relaxed mb-4">Total immobility is the enemy of recovery. Engage
+            in Zone 2 cardio (light jogging, cycling) or dynamic stretching on rest days to promote blood flow, clear
+            lactic acid, and accelerate tissue repair without taxing the central nervous system.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <div class="mb-8 fade-in">
+        <h2
+          style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:#e8e0d0;font-weight:300; border-bottom: 1px solid rgba(201,168,76,0.2); padding-bottom: 10px;">
+          The <span class="text-gold-gradient" style="font-style:italic;">Etiquette</span> of Presence
+        </h2>
+        <p style="font-size:0.85rem;color:#9a9080;margin-top:10px;">Charisma isn't magic; it is a series of controllable
+          behaviors.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+
+        <div class="glass-dark p-8 fade-in" style="position: relative;">
+          <div
+            style="position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#C9A84C,transparent);border-radius:16px 0 0 16px;">
+          </div>
+          <div
+            class="w-12 h-12 rounded-full border border-[#C9A84C]/40 flex items-center justify-center mb-6 bg-[#C9A84C]/10">
+            <span style="font-size:1.2rem;">👁️</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:12px;">Eye
+            Contact Dynamics</h3>
+          <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;">
+            Hold eye contact 70% of the time while listening, and 50% while speaking. Do not be the first to look away
+            when acknowledging someone. It establishes immediate, non-verbal dominance without aggression.
+          </p>
+        </div>
+
+        <div class="glass-dark p-8 fade-in" style="position: relative; transition-delay:0.1s;">
+          <div
+            style="position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#C9A84C,transparent);border-radius:16px 0 0 16px;">
+          </div>
+          <div
+            class="w-12 h-12 rounded-full border border-[#C9A84C]/40 flex items-center justify-center mb-6 bg-[#C9A84C]/10">
+            <span style="font-size:1.2rem;">⏳</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:12px;">The Art
+            of the Pause</h3>
+          <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;">
+            Anxious men rush to fill the silence. A gentleman lets his words hang in the air. Pause for 2 seconds before
+            answering a difficult question. It frames you as thoughtful, unbothered, and in control.
+          </p>
+        </div>
+
+        <div class="glass-dark p-8 fade-in" style="position: relative; transition-delay:0.2s;">
+          <div
+            style="position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,#C9A84C,transparent);border-radius:16px 0 0 16px;">
+          </div>
+          <div
+            class="w-12 h-12 rounded-full border border-[#C9A84C]/40 flex items-center justify-center mb-6 bg-[#C9A84C]/10">
+            <span style="font-size:1.2rem;">🛡️</span>
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#e8e0d0;margin-bottom:12px;">
+            Emotional Stoicism</h3>
+          <p style="font-size:0.8rem;color:#9a9080;line-height:1.7;">
+            Never let an insult visibly move you. Reacting with anger gives away your power. Respond to disrespect with
+            cold, silent amusement or a terrifyingly calm clarification. Master your emotional baseline.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="h-10 w-full"></div>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+        </path>
+      </svg>
+    </a>
+    <a href="module-viewer.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+        </path>
+      </svg>
+    </a>
+    <a href="dressing-sense.html" class="nav-item active">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+        </path>
+      </svg>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+    </a>
+  </nav>
+
+  <script>
+    // Fade-in animation logic
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+
+    // ═══════════════════════════════════════════
+    // CUSTOM PREMIUM CURSOR LOGIC
+    // ═══════════════════════════════════════════
+    // Only run this script if the user is on a device with a mouse
+    if (window.matchMedia("(pointer: fine)").matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let ringX = 0;
+      let ringY = 0;
+
+      // Track the exact mouse coordinates
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Move the center dot instantly
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+      });
+
+      // Smoothly animate the trailing ring
+      function animateRing() {
+        // This creates that premium, smooth lagging effect (0.15 is the speed)
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+
+        ring.style.left = `${ringX}px`;
+        ring.style.top = `${ringY}px`;
+
+        requestAnimationFrame(animateRing);
+      }
+      animateRing(); // Start the animation loop
+
+      // Expand the cursor when hovering over interactive elements
+      const interactables = document.querySelectorAll('a, button, .filter-btn, .tag, input, select, textarea');
+
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          ring.classList.add('hovered');
+          dot.classList.add('hovered');
+        });
+        el.addEventListener('mouseleave', () => {
+          ring.classList.remove('hovered');
+          dot.classList.remove('hovered');
+        });
+      });
+    }
+  </script>
+
+  <script src="ai-core.js"></script>
+</body>
+
+</html>

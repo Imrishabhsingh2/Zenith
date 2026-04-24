@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Wardrobe Architect | The Zenith
+    <script>
+    if (localStorage.getItem('zenith_auth') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+  </title>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25' } },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Custom Premium Cursor (Desktop Only) ── */
+    @media (pointer: fine) {
+      /* Hide the default system cursor */
+      body, a, button, input, select, textarea, .filter-btn, .nav-item, .task-row {
+        cursor: none !important;
+      }
+
+      /* The sharp center point */
+      .cursor-dot {
+        position: fixed !important; 
+        pointer-events: none !important; 
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 6px;
+        background-color: #C9A84C;
+        border-radius: 50%;
+        z-index: 99999 !important;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s ease;
+      }
+
+      /* The smooth trailing glass ring */
+      .cursor-ring {
+        position: fixed !important; 
+        pointer-events: none !important; 
+        top: 0;
+        left: 0;
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        background: rgba(201, 168, 76, 0.05);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border-radius: 50%;
+        z-index: 99998 !important;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+      }
+
+      /* The expanded state when hovering */
+      .cursor-ring.hovered {
+        width: 56px;
+        height: 56px;
+        background: rgba(201, 168, 76, 0.1);
+        border-color: rgba(201, 168, 76, 0.8);
+      }
+      
+      .cursor-dot.hovered {
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: 'Montserrat', sans-serif; background: #0d0d0d; color: #e8e0d0; overflow-x: hidden; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+    
+    main {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    }
+
+    .glass { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(16px); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 16px; }
+    .glass-input { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 8px; padding: 14px 16px; color: #e8e0d0; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; appearance: none; }
+    .glass-input:focus { outline: none; border-color: rgba(201, 168, 76, 0.7); background: rgba(255, 255, 255, 0.06); }
+    select.glass-input option { background: #0d0d0d; color: #e8e0d0; }
+    
+    /* ── Ultra-Premium Floating Glass Dock ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      min-width: 280px;
+      
+      background: rgba(15, 15, 15, 0.35);
+      backdrop-filter: blur(36px) saturate(220%);
+      -webkit-backdrop-filter: blur(36px) saturate(220%);
+      
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-top: 1px solid rgba(201, 168, 76, 0.4);
+      border-radius: 99px;
+      
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      height: 64px;
+      z-index: 1000;
+      padding: 0 12px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6a6055;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    .nav-item.active {
+      color: #C9A84C;
+      background: rgba(201, 168, 76, 0.12);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      box-shadow: 0 0 16px rgba(201, 168, 76, 0.15), inset 0 0 8px rgba(201, 168, 76, 0.1);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .nav-item.active svg {
+      transform: scale(1.15);
+      filter: drop-shadow(0 2px 6px rgba(201, 168, 76, 0.5));
+    }
+    
+    /* Animation for the outfit result */
+    #outfit-result { display: none; opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
+    #outfit-result.visible { display: block; opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+
+<body>
+<div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <main class="px-5 py-6">
+    
+    <div class="mb-8 pt-4">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:#C9A84C;">PILLAR I UTILITY</p>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:#e8e0d0;line-height:1.1;">Wardrobe Architect.</h1>
+      <p style="font-size:0.85rem;color:#9a9080;margin-top:8px;">Input your parameters. Command the room.</p>
+    </div>
+
+    <div class="glass p-5 mb-8">
+      <div class="mb-5">
+        <label class="block text-[0.7rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Target Occasion</label>
+        <select id="occasion-select" class="glass-input">
+          <option value="" disabled selected>Select an occasion...</option>
+          <option value="boardroom">High-Stakes Boardroom</option>
+          <option value="date">Evening Date / Lounge</option>
+          <option value="weekend">Refined Weekend Casual</option>
+          <option value="event">Formal / Black Tie Optional</option>
+        </select>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-[0.7rem] uppercase tracking-[0.15em] text-[#9a9080] mb-2 ml-1">Current Climate</label>
+        <select id="climate-select" class="glass-input">
+          <option value="" disabled selected>Select climate...</option>
+          <option value="warm">Warm & Humid</option>
+          <option value="mild">Mild / Transitional</option>
+          <option value="cold">Cold & Crisp</option>
+        </select>
+      </div>
+
+      <button onclick="generateOutfit()" class="btn-primary">Generate Formula</button>
+    </div>
+
+    <div id="outfit-result" class="glass p-5 border-[#C9A84C]">
+      <h2 class="text-[0.75rem] uppercase tracking-[0.15em] text-[#C9A84C] mb-4 text-center border-b border-[#C9A84C]/20 pb-3">Recommended Arsenal</h2>
+      
+      <div class="space-y-4 mb-6">
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-[#C9A84C] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Base Layer</p>
+            <p id="res-base" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-[#C9A84C] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Outerwear / Jacket</p>
+            <p id="res-outer" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-[#C9A84C] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Trousers</p>
+            <p id="res-pants" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-[#C9A84C] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Footwear</p>
+            <p id="res-shoes" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pt-3 border-t border-[#C9A84C]/10">
+          <svg class="w-5 h-5 text-[#9a9080] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Accessory / Hardware</p>
+            <p id="res-acc" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-[#9a9080] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          <div>
+            <p class="text-[0.6rem] uppercase tracking-widest text-[#6a6055]">Signature Fragrance</p>
+            <p id="res-fragrance" class="text-[0.9rem] text-[#e8e0d0] font-medium">--</p>
+          </div>
+        </div>
+      </div>
+      
+      <button class="w-full bg-[#1a1a1a] border border-[#C9A84C]/30 text-[#C9A84C] font-bold uppercase text-[0.7rem] tracking-widest py-3 rounded-lg hover:bg-[#C9A84C]/10 transition-colors">Lock In Protocol</button>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+    </a>
+    <a href="#" class="nav-item active">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+    </a>
+    <a href="dressing-sense.html" class="nav-item active">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+    </a>
+  </nav>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // CUSTOM PREMIUM CURSOR LOGIC
+    // ═══════════════════════════════════════════
+    if (window.matchMedia("(pointer: fine)").matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      
+      let mouseX = 0;
+      let mouseY = 0;
+      let ringX = 0;
+      let ringY = 0;
+
+      // Track the exact mouse coordinates safely during scroll
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        if(dot) {
+          dot.style.left = `${mouseX}px`;
+          dot.style.top = `${mouseY}px`;
+        }
+      });
+
+      // Smoothly animate the trailing ring
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        
+        if(ring) {
+          ring.style.left = `${ringX}px`;
+          ring.style.top = `${ringY}px`;
+        }
+        
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      // Expand the cursor when hovering over interactive elements
+      const interactables = document.querySelectorAll('a, button, .filter-btn, .tag, input, select, textarea, .nav-item, .task-row');
+      
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if(ring) ring.classList.add('hovered');
+          if(dot) dot.classList.add('hovered');
+        });
+        el.addEventListener('mouseleave', () => {
+          if(ring) ring.classList.remove('hovered');
+          if(dot) dot.classList.remove('hovered');
+        });
+      });
+    }
+    const outfitDatabase = {
+      boardroom: {
+        warm: { base: "Crisp White Poplin Shirt (No Tie)", outer: "Unlined Navy Linen Blend Blazer", pants: "Light Grey Tropical Wool Trousers", shoes: "Dark Brown Penny Loafers", acc: "Steel Dress Watch with Brown Leather Strap", fragrance: "Creed Aventus (Fresh/Fruity)" },
+        mild: { base: "Light Blue Oxford Shirt with Silk Tie", outer: "Charcoal Worsted Wool Suit Jacket", pants: "Matching Charcoal Worsted Trousers", shoes: "Black Wholecut Oxfords", acc: "Minimalist Silver Cufflinks", fragrance: "Bleu de Chanel Eau de Parfum" },
+        cold: { base: "White Twill Shirt", outer: "Navy Flannel Suit Jacket", pants: "Matching Navy Flannel Trousers", shoes: "Black Cap-Toe Oxfords", acc: "Cashmere Scarf in Charcoal", fragrance: "Tom Ford Oud Wood" }
+      },
+      date: {
+        warm: { base: "Navy Short-Sleeve Knit Polo", outer: "None / Lightweight Steel Chronograph Watch", pants: "Tailored Cream Chinos", shoes: "Minimalist White Leather Sneakers", acc: "Steel Chronograph Watch", fragrance: "Acqua di Gio Profumo" },
+        mild: { base: "Black Fine-Gauge Merino Crewneck", outer: "Suede Café Racer Jacket", pants: "Dark Wash Selvedge Denim", shoes: "Suede Chelsea Boots", acc: "Minimalist Black Leather Belt", fragrance: "YSL La Nuit de L'Homme" },
+        cold: { base: "Charcoal Cashmere Turtleneck", outer: "Camel Overcoat", pants: "Black Tailored Trousers", shoes: "Black Leather Chelsea Boots", acc: "Leather Gloves in Black", fragrance: "Maison Margiela Jazz Club" }
+      },
+      weekend: {
+        warm: { base: "White Premium Cotton T-Shirt", outer: "Acetate Aviator Sunglasses", pants: "Navy Tailored Drawstring Trousers", shoes: "Minimalist White Leather Sneakers", acc: "Tortoiseshell Sunglasses", fragrance: "Tom Ford Neroli Portofino" },
+        mild: { base: "Grey Marl Sweatshirt", outer: "Olive Field Jacket", pants: "Dark Wash Denim", shoes: "Suede Desert Boots", acc: "Canvas Tote Bag", fragrance: "Dior Sauvage" },
+        cold: { base: "Heavyweight Navy Cable Knit Sweater", outer: "Quilted Gilet / Vest", pants: "Charcoal Flannel Trousers", shoes: "Brown Brogue Boots", acc: "Beanie in Navy Wool", fragrance: "Parfums de Marly Herod" }
+      },
+      event: {
+        warm: { base: "White Dress Shirt", outer: "Midnight Blue Tuxedo Jacket", pants: "Midnight Blue Tuxedo Trousers", shoes: "Black Patent Leather Oxfords", acc: "Black Silk Bow Tie", fragrance: "Tom Ford Tuscan Leather" },
+        mild: { base: "White Pique Shirt with Bowtie", outer: "Black Peak Lapel Tuxedo Jacket", pants: "Black Tuxedo Trousers with Silk Stripe", shoes: "Black Patent Leather Loafers", acc: "White Pocket Square", fragrance: "Creed Green Irish Tweed" },
+        cold: { base: "White Dress Shirt", outer: "Black Velvet Dinner Jacket", pants: "Black Tuxedo Trousers", shoes: "Black Velvet Slippers", acc: "Silver Dress Studs", fragrance: "Amouage Interlude Man" }
+      }
+    };
+
+    function generateOutfit() {
+      const occasion = document.getElementById('occasion-select').value;
+      const climate = document.getElementById('climate-select').value;
+      const resultBox = document.getElementById('outfit-result');
+
+      if (!occasion || !climate) {
+        // Just a gentle visual shake if they forgot to select, rather than an annoying popup
+        resultBox.style.display = 'none';
+        return;
+      }
+
+      const suggestion = outfitDatabase[occasion][climate];
+
+      // Populate text
+      document.getElementById('res-base').innerText = suggestion.base;
+      document.getElementById('res-outer').innerText = suggestion.outer;
+      document.getElementById('res-pants').innerText = suggestion.pants;
+      document.getElementById('res-shoes').innerText = suggestion.shoes;
+      document.getElementById('res-acc').innerText = suggestion.acc;
+      document.getElementById('res-fragrance').innerText = suggestion.fragrance;
+
+      // Show result with animation
+      resultBox.classList.remove('visible');
+      
+      setTimeout(() => {
+        resultBox.style.display = 'block';
+        setTimeout(() => {
+          resultBox.classList.add('visible');
+          // Scroll slightly down so they see it
+          window.scrollBy({ top: 150, behavior: 'smooth' });
+        }, 50);
+      }, 100);
+    }
+  </script>
+
+  <script src="ai-core.js"></script>
+</body>
+</html>

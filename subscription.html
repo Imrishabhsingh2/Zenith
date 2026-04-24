@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Upgrade | The Zenith</title>
+  
+  <script>
+    if (localStorage.getItem('zenith_auth') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+  
+  <meta name="theme-color" content="#0d0d0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#8C6D25' },
+            charcoal: { DEFAULT: '#1A1A1A', 800: '#252525' },
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            heading: ['Bebas Neue', 'sans-serif'],
+            body: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ── Custom Premium Cursor (Desktop Only) ── */
+    @media (pointer: fine) {
+      body, a, button, input, select, textarea, .nav-item { cursor: none !important; }
+      .cursor-dot { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 6px; height: 6px; background-color: #C9A84C; border-radius: 50%; z-index: 99999 !important; transform: translate(-50%, -50%); transition: transform 0.2s ease; }
+      .cursor-ring { position: fixed !important; pointer-events: none !important; top: 0; left: 0; width: 34px; height: 34px; border: 1px solid rgba(201, 168, 76, 0.4); background: rgba(201, 168, 76, 0.05); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); border-radius: 50%; z-index: 99998 !important; transform: translate(-50%, -50%); transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease; }
+      .cursor-ring.hovered { width: 56px; height: 56px; background: rgba(201, 168, 76, 0.1); border-color: rgba(201, 168, 76, 0.8); }
+      .cursor-dot.hovered { transform: translate(-50%, -50%) scale(0.5); }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { background-color: #0d0d0d; overflow-x: hidden; scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', sans-serif; background-color: #0d0d0d; color: #e8e0d0; overflow-x: hidden; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+    
+    main { padding-top: env(safe-area-inset-top); padding-bottom: calc(100px + env(safe-area-inset-bottom)); max-width: 800px; margin: 0 auto; }
+
+    .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 16px; }
+    .glass-highlight { background: rgba(201, 168, 76, 0.05); backdrop-filter: blur(16px); border: 1px solid rgba(201, 168, 76, 0.4); border-radius: 16px; box-shadow: 0 0 30px rgba(201, 168, 76, 0.1); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #C9A84C, #8C6D25);
+      color: #0d0d0d;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.2);
+    }
+    
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(201, 168, 76, 0.3); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #e8e0d0;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-secondary:hover { background: rgba(201, 168, 76, 0.1); border-color: #C9A84C; }
+    
+    .feature-list li { display: flex; align-items: start; gap: 8px; font-size: 0.85rem; color: #9a9080; margin-bottom: 12px; line-height: 1.4; }
+    .feature-list li svg { flex-shrink: 0; width: 16px; height: 16px; color: #C9A84C; margin-top: 2px; }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <main class="px-5 py-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8 pt-4">
+      <a href="profile.html" class="w-10 h-10 flex items-center justify-center rounded-full glass hover:bg-white/5 transition-colors">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#C9A84C;line-height:1;">Membership</h1>
+      <div class="w-10 h-10"></div> <!-- Spacer -->
+    </div>
+
+    <!-- Intro Text -->
+    <div class="text-center mb-10">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:#e8e0d0;line-height:1.1;margin-bottom:8px;">Ascend to Greatness</h2>
+      <p style="font-size:0.85rem;color:#9a9080;line-height:1.6;">Select the tier that aligns with your ambition. Unlock exclusive protocols, personalized guidance, and advanced intelligence.</p>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      
+      <!-- Tier 1: Initiate -->
+      <section class="glass p-6">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#e8e0d0;letter-spacing:0.1em;margin-bottom:4px;">Initiate</h3>
+        <div class="flex items-end gap-1 mb-6 border-b border-[#C9A84C]/10 pb-4">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#C9A84C;line-height:1;">Free</span>
+        </div>
+        <ul class="feature-list mb-6">
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Access to basic foundation modules</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Manual habit and routine tracking</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Standard Daily Directive</li>
+        </ul>
+        <button class="btn-secondary" style="opacity: 0.5; cursor: default;">Current Plan</button>
+      </section>
+
+      <!-- Tier 2: Elite (Highlighted) -->
+      <section class="glass-highlight p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-gradient-to-r from-[#C9A84C] to-[#8C6D25] text-[#0d0d0d] text-[0.6rem] font-bold uppercase tracking-widest px-4 py-1 rounded-bl-lg">Recommended</div>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#e8e0d0;letter-spacing:0.1em;margin-bottom:4px;">Elite</h3>
+        <div class="flex items-end gap-1 mb-6 border-b border-[#C9A84C]/20 pb-4">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#C9A84C;line-height:1;">$9.99</span>
+          <span style="font-size:0.8rem;color:#6a6055;margin-bottom:4px;">/ month</span>
+        </div>
+        <ul class="feature-list mb-6">
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Full access to all premium modules</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>AI Face & Physique Scanning limits unlocked</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Advanced customized workout & skincare routines</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Priority in-app chat support</li>
+        </ul>
+        <button class="btn-primary" onclick="alert('Upgrade flow simulated.')">Upgrade to Elite</button>
+      </section>
+
+      <!-- Tier 3: Zenith -->
+      <section class="glass p-6">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#e8e0d0;letter-spacing:0.1em;margin-bottom:4px;">Zenith</h3>
+        <div class="flex items-end gap-1 mb-6 border-b border-[#C9A84C]/10 pb-4">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#C9A84C;line-height:1;">$99</span>
+          <span style="font-size:0.8rem;color:#6a6055;margin-bottom:4px;">/ month</span>
+        </div>
+        <ul class="feature-list mb-6">
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Everything in Elite tier</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>1-on-1 monthly video consultation with experts</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Bespoke wardrobe sourcing via The Concierge</li>
+          <li><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>Exclusive invites to local brotherhood events</li>
+        </ul>
+        <button class="btn-secondary" onclick="alert('Zenith application simulated.')">Apply for Zenith</button>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // Custom Premium Cursor Logic
+    if (window.matchMedia("(pointer: fine)").matches) {
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        if(dot) { dot.style.left = `${mouseX}px`; dot.style.top = `${mouseY}px`; }
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+        if(ring) { ring.style.left = `${ringX}px`; ring.style.top = `${ringY}px`; }
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      const interactables = document.querySelectorAll('a, button');
+      interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if(ring) ring.classList.add('hovered');
+          if(dot) dot.classList.add('hovered');
+        });
+        el.addEventListener('mouseleave', () => {
+          if(ring) ring.classList.remove('hovered');
+          if(dot) dot.classList.remove('hovered');
+        });
+      });
+    }
+  </script>
+</body>
+</html>
